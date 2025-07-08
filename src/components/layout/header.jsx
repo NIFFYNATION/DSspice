@@ -117,6 +117,13 @@ export default function Header() {
                   </Link>
                 )
               ))}
+              {/* Login/Signup for unauthenticated users */}
+              {!isAuthenticated && (
+                <>
+                  <Link to="/login" className="ml-4 px-6 py-2 rounded-full border border-accent text-accent font-medium transition-all duration-200 hover:bg-accent-dark bg-white">Login</Link>
+                  {/* <Link to="/signup" className="ml-2 px-4 py-2 rounded-full border border-accent text-accent font-medium transition-all duration-200 hover:bg-accent hover:text-white">Sign Up</Link> */}
+                </>
+              )}
             </div>
 
             {/* Action Buttons */}
@@ -285,6 +292,13 @@ export default function Header() {
                     </Link>
                   )
                 ))}
+                {/* Login/Signup for unauthenticated users (mobile) */}
+                {!isAuthenticated && (
+                  <>
+                    {/* <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="w-full block px-4 py-3 rounded-xl font-semibold text-base text-white bg-accent text-center mt-2">Login</Link> */}
+                    <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="w-full block px-4 py-3 rounded-xl font-semibold text-base text-accent border border-accent text-center mt-2">Login</Link>
+                  </>
+                )}
               </nav>
 
               {/* Divider */}

@@ -209,11 +209,8 @@ const authService = {
       const formData = new FormData();
       formData.append('email', email);
       formData.append('code', code);
-      // Properly encode passwords in base64
-      const encodedNewPassword = btoa(unescape(encodeURIComponent(newPassword)));
-      const encodedConfirmPassword = btoa(unescape(encodeURIComponent(confirmPassword)));
-      formData.append('password', encodedNewPassword);
-      formData.append('confirm_password', encodedConfirmPassword);
+      formData.append('password', newPassword);
+      formData.append('confirm_password', confirmPassword);
       const response = await api.post('/auth/resetpassword', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

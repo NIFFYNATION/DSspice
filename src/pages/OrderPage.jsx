@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Button from '../components/common/Button';
 import BackButton from '../components/common/BackButton';
 import { fadeInUp, staggerContainer } from '../animations/variants';
-import { PlusIcon, MinusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { cookies } from '../utils/cookies';
 import orderService from '../api/orderService';
@@ -25,6 +25,8 @@ export default function OrderPage() {
   });
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [expandedImage, setExpandedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Fetch product data on mount
   useEffect(() => {
@@ -49,7 +51,10 @@ export default function OrderPage() {
               name: size.size,
               weight: size.weight,
               price: size.price,
-              stock: size.quantity
+              stock: size.quantity,
+              containerImage: size.container_image
+                ? `${productData.image_base_url.replace(/\/$/, '')}/${size.container_image.replace(/^\//, '')}`
+                : null
             }))
           };
           setProduct(formattedProduct);
@@ -352,15 +357,29 @@ export default function OrderPage() {
                     setSelectedSize(size);
                     setQuantity(1);
                   }}
-                  className={`p-4 rounded-xl text-center transition-all ${
+                  className={`p-2 rounded-xl text-center transition-all ${
                     selectedSize?.id === size.id 
                       ? 'bg-accent/20 border-2 border-accent' 
                       : 'bg-background-alt dark:bg-dark-background-alt border-2 border-transparent hover:border-accent/30'
                   } ${size.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
                   disabled={size.stock === 0}
+                  type="button"
                 >
-                  <div className="flex flex-row sm:flex-col items-center sm:items-center justify-between sm:justify-center sm:gap-2">
-                    <div className="flex items-center gap-2">
+                  <div className="flex flex-col items-center gap-1">
+                    {/* Size container image */}
+                    {size.containerImage && (
+                      <img
+                        src={size.containerImage}
+                        alt={`${size.name} container`}
+                        className={`w-12 h-12 object-cover rounded-full border-2 mb-1 transition-all cursor-pointer ${selectedSize?.id === size.id ? 'border-accent shadow-lg' : 'border-secondary'}`}
+                        onClick={e => {
+                          e.stopPropagation();
+                          setExpandedImage(size.containerImage);
+                          setIsModalOpen(true);
+                        }}
+                      />
+                    )}
+                    <div className="flex flex-col items-center gap-0.5 w-full">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         selectedSize?.id === size.id ? 'border-accent bg-accent' : 'border-secondary'
                       }`}>
@@ -370,21 +389,13 @@ export default function OrderPage() {
                           </svg>
                         )}
                       </div>
-                      <div className="text-left sm:text-center">
-                        <h3 className="text-base font-medium">{size.name}</h3>
-                        <p className="text-sm text-text-secondary dark:text-dark-text-secondary">
-                          {size.weight}
-                        </p>
-                        <p className={`text-sm ${
-                          size.stock < 5 ? 'text-red-500' : 'text-green-500'
-                        }`}>
-                          {size.stock === 0 ? 'Out of Stock' : 
-                           size.stock < 5 ? `Only ${size.stock} left` : 
-                           `${size.stock} in stock`}
-                        </p>
+                      <div className="text-center w-full">
+                        <h3 className="text-base font-semibold mb-0.5">{size.name}</h3>
+                        <p className="text-xs text-text-secondary dark:text-dark-text-secondary mb-0.5">{size.weight}</p>
+                        <p className={`text-xs ${size.stock < 5 ? 'text-red-500' : 'text-green-500'}`}>{size.stock === 0 ? 'Out of Stock' : size.stock < 5 ? `Only ${size.stock} left` : `${size.stock} in stock`}</p>
                       </div>
                     </div>
-                    <p className="text-accent font-bold">
+                    <p className="text-accent font-bold text-base mt-1">
                       £{size && typeof size.price === "number" ? size.price.toFixed(2) : "0.00"}
                     </p>
                   </div>
@@ -463,6 +474,24 @@ export default function OrderPage() {
           </>
         )}
       </div>
+      {/* Modal for expanded image */}
+      {isModalOpen && expandedImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}>
+          <div className="relative max-w-md w-full p-4" onClick={e => e.stopPropagation()}>
+            <button
+              className="absolute top-2 right-2 p-2 rounded-full bg-white/80 hover:bg-white shadow"
+              onClick={() => setIsModalOpen(false)}
+            >
+              <XMarkIcon className="w-6 h-6 text-black" />
+            </button>
+            <img
+              src={expandedImage}
+              alt="Expanded container"
+              className="w-full h-auto max-h-[80vh] rounded-xl shadow-lg object-contain bg-white"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 } 

@@ -13,6 +13,10 @@ import TestUserProfile from './components/test/TestUserProfile'
 import OrderManagementPage from './pages/OrderManagementPage'
 import PaymentsManagementPage from './pages/PaymentsManagementPage'
 import PaymentVerificationPage from './pages/PaymentVerificationPage'
+import TermsPage from './pages/TermsPage'
+import PolicyPage from './pages/PolicyPage'
+import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
 
 // ScrollToTop component to handle scrolling to top on route changes
 function ScrollToTop() {
@@ -65,6 +69,10 @@ export default function App() {
                     <Route path="/orders" element={<OrderManagementPage />} />
                     <Route path="/payments" element={<PaymentsManagementPage />} />
                     <Route path="/pay/verify" element={<PaymentVerificationPage />} />
+                    <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/policy" element={<PolicyPage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
                   </Routes>
                   
                   
