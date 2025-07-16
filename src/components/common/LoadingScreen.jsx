@@ -21,7 +21,7 @@ export default function LoadingScreen({ show = true, duration = 2500 }) {
   }, [show, duration]);
   
   // Prepare the letters for the animated text
-  const letters = "DSSPICE".split("");
+  const letters = "D&Sspice".split("");
   
   return (
     <AnimatePresence>

@@ -76,18 +76,46 @@ export default function QuickView({ product, isOpen, onClose }) {
                         <h4 className="font-medium text-text-primary dark:text-dark-text-primary mb-2">
                           Size
                         </h4>
-                        <div className="flex gap-3">
+                        <div className="flex flex-col gap-4">
                           {product.sizes.map((size) => (
                             <button
                               key={size.size}
                               onClick={() => setSelectedSize(size)}
-                              className={`px-4 py-2 rounded-lg border ${
-                                selectedSize.size === size.size
-                                  ? 'border-accent bg-accent/10 text-accent dark:text-accent'
-                                  : 'border-secondary/20 hover:border-accent text-text-primary dark:text-dark-text-primary'
-                              }`}
+                              className={`relative group flex items-center w-full px-3 py-3 rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent/40 shadow-sm cursor-pointer
+                                ${selectedSize.size === size.size
+                                  ? 'border-accent bg-accent/10 text-accent dark:text-accent scale-[1.02] shadow-lg'
+                                  : 'border-secondary/20 hover:border-accent hover:scale-[1.01] hover:shadow-md text-text-primary dark:text-dark-text-primary'}
+                              `}
+                              tabIndex={0}
+                              aria-label={`Select size ${size.weight}`}
                             >
-                              {size.weight}
+                              {/* Size image (if available) */}
+                              {size.imageSrc ? (
+                                <img
+                                  src={size.imageSrc}
+                                  alt={size.weight}
+                                  className="w-16 h-16 object-cover rounded-lg mr-4 group-hover:scale-105 group-focus:scale-105 transition-transform duration-200 border border-secondary/20"
+                                />
+                              ) : (
+                                <div className="w-16 h-16 flex items-center justify-center bg-secondary/10 rounded-lg mr-4 text-2xl text-accent">
+                                  <span role="img" aria-label="size">📦</span>
+                                </div>
+                              )}
+                              {/* Details */}
+                              <div className="flex flex-col items-start flex-1">
+                                <span className="font-semibold text-base mb-1">{size.weight}</span>
+                                <span className="text-xs text-text-secondary">{size.size}</span>
+                              </div>
+                              {/* Expand icon overlay */}
+                              <span className="absolute top-2 right-4 opacity-70 group-hover:opacity-100 group-focus:opacity-100 transition-opacity" title="Click to expand">
+                                <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-accent">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 3h6m0 0v6m0-6L10 14m-1 7h-6m0 0v-6m0 6l11-11" />
+                                </svg>
+                              </span>
+                              {/* Tooltip */}
+                              <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-90 group-focus:opacity-90 pointer-events-none transition-opacity">
+                                Click to expand
+                              </span>
                             </button>
                           ))}
                         </div>

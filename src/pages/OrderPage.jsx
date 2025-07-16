@@ -8,6 +8,7 @@ import { PlusIcon, MinusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import { cookies } from '../utils/cookies';
 import orderService from '../api/orderService';
+import CleanText from '../utils/helper.jsx';
 
 export default function OrderPage() {
   const navigate = useNavigate();
@@ -247,10 +248,10 @@ export default function OrderPage() {
             className="text-center"
           >
             <h1 className="text-3xl sm:text-4xl font-bold text-text-primary dark:text-dark-text-primary mb-4">
-              Order Locust Beans
+              <CleanText rawText="Order Locust Beans" />
             </h1>
             <p className="text-text-secondary dark:text-dark-text-secondary">
-              Select your preferred size and quantity
+              <CleanText rawText="Select your preferred size and quantity" />
             </p>
           </motion.div>
           
@@ -323,11 +324,11 @@ export default function OrderPage() {
               
               <div className="p-6 md:w-3/5">
                 <h2 className="text-2xl font-bold text-text-primary dark:text-dark-text-primary mb-2">
-                  {product.name}
+                  <CleanText rawText={product.name} />
                 </h2>
                 
                 <p className="text-text-secondary dark:text-dark-text-secondary mb-6">
-                  {product.description}
+                  <CleanText rawText={product.description} />
                 </p>
                 
                 <div className="mb-6">
@@ -335,7 +336,7 @@ export default function OrderPage() {
                   <ul className="space-y-2">
                         {product.features.map((feature, index) => (
                           <li key={index} className="flex items-center text-text-secondary dark:text-dark-text-secondary">
-                            <span className="mr-2 text-accent">•</span> {feature}
+                            <span className="mr-2 text-accent">•</span> <CleanText rawText={feature} />
                     </li>
                         ))}
                   </ul>
@@ -347,58 +348,77 @@ export default function OrderPage() {
           {/* Size Selection */}
           <motion.div variants={fadeInUp} className="space-y-6">
             <h2 className="text-xl font-semibold text-text-primary dark:text-dark-text-primary">
-              1. Choose Size
+              <CleanText rawText="1. Choose Size" />
             </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {product.sizes.map((size) => (
+            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-6">
+              {product.sizes.map((size, idx) => (
                 <button
                   key={size.id}
                   onClick={() => {
                     setSelectedSize(size);
                     setQuantity(1);
                   }}
-                  className={`p-2 rounded-xl text-center transition-all ${
-                    selectedSize?.id === size.id 
-                      ? 'bg-accent/20 border-2 border-accent' 
-                      : 'bg-background-alt dark:bg-dark-background-alt border-2 border-transparent hover:border-accent/30'
-                  } ${size.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`relative group flex items-center w-full sm:w-[calc(33.333%-1.5rem)] max-w-full px-3 py-2 sm:py-3 rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent/40 shadow-sm cursor-pointer
+                    ${selectedSize?.id === size.id
+                      ? 'border-accent bg-accent/10 text-accent dark:text-accent scale-[1.02] shadow-lg'
+                      : 'border-secondary/20 hover:border-accent hover:scale-[1.01] hover:shadow-md text-text-primary dark:text-dark-text-primary'}
+                    ${size.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''}
+                  `}
+                  style={{ flex: '1 1 100px', minWidth: '100px', maxWidth: '100%', ...(window.innerWidth >= 640 ? { flex: '1 1 300px', minWidth: '260px' } : {}) }}
                   disabled={size.stock === 0}
                   type="button"
+                  tabIndex={0}
+                  aria-label={`Select size ${size.weight}`}
                 >
-                  <div className="flex flex-col items-center gap-1">
-                    {/* Size container image */}
-                    {size.containerImage && (
+                  {/* Size container image */}
+                  {size.containerImage ? (
+                    <div className="relative mr-4">
                       <img
                         src={size.containerImage}
                         alt={`${size.name} container`}
-                        className={`w-12 h-12 object-cover rounded-full border-2 mb-1 transition-all cursor-pointer ${selectedSize?.id === size.id ? 'border-accent shadow-lg' : 'border-secondary'}`}
+                        className="w-20 h-20 object-cover rounded-lg group-hover:scale-105 group-focus:scale-105 transition-transform duration-200 border border-secondary/20 cursor-pointer"
                         onClick={e => {
                           e.stopPropagation();
                           setExpandedImage(size.containerImage);
                           setIsModalOpen(true);
                         }}
                       />
-                    )}
-                    <div className="flex flex-col items-center gap-0.5 w-full">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        selectedSize?.id === size.id ? 'border-accent bg-accent' : 'border-secondary'
-                      }`}>
-                        {selectedSize?.id === size.id && (
-                          <svg className="w-3 h-3 text-text-primary dark:text-dark-text-primary" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </div>
-                      <div className="text-center w-full">
-                        <h3 className="text-base font-semibold mb-0.5">{size.name}</h3>
-                        <p className="text-xs text-text-secondary dark:text-dark-text-secondary mb-0.5">{size.weight}</p>
-                        <p className={`text-xs ${size.stock < 5 ? 'text-red-500' : 'text-green-500'}`}>{size.stock === 0 ? 'Out of Stock' : size.stock < 5 ? `Only ${size.stock} left` : `${size.stock} in stock`}</p>
-                      </div>
+                      {/* Expand icon overlay - smaller, circle, semi-transparent */}
+                      <span className="absolute top-2 right-2 flex items-center justify-center w-6 h-6 rounded-full bg-black/30 opacity-80 group-hover:opacity-100 group-focus:opacity-100 transition-opacity pointer-events-none" title="Click to expand">
+                        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="text-accent">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 3h6m0 0v6m0-6L10 14m-1 7h-6m0 0v-6m0 6l11-11" />
+                        </svg>
+                      </span>
                     </div>
-                    <p className="text-accent font-bold text-base mt-1">
-                      £{size && typeof size.price === "number" ? size.price.toFixed(2) : "0.00"}
-                    </p>
+                  ) : (
+                    <div className="w-20 h-20 flex items-center justify-center bg-secondary/10 rounded-lg mr-4 text-2xl text-accent">
+                      <span role="img" aria-label="size">📦</span>
+                    </div>
+                  )}
+                  {/* Details */}
+                  <div className="flex flex-col items-start flex-1">
+                    <h3 className="text-base font-semibold mb-0.5"><CleanText rawText={size.name} /></h3>
+                    <span className="text-xs text-text-secondary mb-0.5"><CleanText rawText={size.weight} /></span>
+                    <span className={`text-xs ${size.stock < 5 ? 'text-red-500' : 'text-green-500'}`}><CleanText rawText={size.stock === 0 ? 'Out of Stock' : size.stock < 5 ? `Only ${size.stock} left` : `${size.stock} in stock`} /></span>
+                    <span className="text-accent font-bold text-base mt-1">£{size && typeof size.price === "number" ? size.price.toFixed(2) : "0.00"}</span>
                   </div>
+                  {/* Radio icon on the right */}
+                  <span className="ml-4 flex items-center justify-center">
+                    {selectedSize?.id === size.id ? (
+                      <svg className="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.15" />
+                        <circle cx="12" cy="12" r="7" fill="currentColor" />
+                      </svg>
+                    ) : (
+                      <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" fill="none" />
+                      </svg>
+                    )}
+                  </span>
+                  {/* Tooltip for expand */}
+                  <span className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-90 group-focus:opacity-90 pointer-events-none transition-opacity whitespace-nowrap">
+                    <CleanText rawText="Click image to expand" />
+                  </span>
                 </button>
               ))}
             </div>
@@ -408,13 +428,13 @@ export default function OrderPage() {
           {selectedSize && (
             <motion.div variants={fadeInUp} className="space-y-6">
               <h2 className="text-xl font-semibold text-text-primary dark:text-dark-text-primary">
-                2. Select Quantity
+                <CleanText rawText="2. Select Quantity" />
               </h2>
               <div className="flex flex-col sm:flex-row items-center justify-between p-6 rounded-2xl bg-background-alt dark:bg-dark-background-alt">
                 <div className="mb-4 sm:mb-0">
-                  <h3 className="text-lg font-medium mb-2">How many would you like?</h3>
+                  <h3 className="text-lg font-medium mb-2"><CleanText rawText="How many would you like?" /></h3>
                   <p className="text-text-secondary dark:text-dark-text-secondary">
-                    Select between 1-{selectedSize.stock} packs
+                    <CleanText rawText={`Select between 1-${selectedSize.stock} packs`} />
                   </p>
                 </div>
                 <QuantitySelector />
@@ -429,27 +449,27 @@ export default function OrderPage() {
                 <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span>Product:</span>
-                    <span>{product.name}</span>
+                    <span><CleanText rawText="Product:" /></span>
+                    <span><CleanText rawText={product.name} /></span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Size:</span>
-                    <span>{selectedSize.weight}</span>
+                    <span><CleanText rawText="Size:" /></span>
+                    <span><CleanText rawText={selectedSize.weight} /></span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Price per unit:</span>
+                    <span><CleanText rawText="Price per unit:" /></span>
                     <span> £{selectedSize && typeof selectedSize.price === "number" ? selectedSize.price.toFixed(2) : "0.00"}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Quantity:</span>
+                    <span><CleanText rawText="Quantity:" /></span>
                     <span>{quantity}</span>
                   </div>
                   <div className="flex justify-between font-bold pt-2 border-t border-accent/20">
-                    <span>Subtotal:</span>
+                    <span><CleanText rawText="Subtotal:" /></span>
                     <span> £{selectedSize && typeof selectedSize.price === "number" ? (selectedSize.price * quantity).toFixed(2) : "0.00"}</span>
                   </div>
                   <p className="text-xs text-text-secondary dark:text-dark-text-secondary mt-2">
-                    *Shipping costs will be calculated at checkout
+                    <CleanText rawText="*Shipping costs will be calculated at checkout" />
                   </p>
                 </div>
               </motion.div>
@@ -466,7 +486,7 @@ export default function OrderPage() {
               isLoading={isLoading}
               className="min-w-[200px] w-full sm:w-auto"
             >
-              Proceed to Checkout
+              <CleanText rawText="Proceed to Checkout" />
             </Button>
             
           </motion.div>

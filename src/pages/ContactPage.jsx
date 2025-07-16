@@ -56,70 +56,66 @@ export default function ContactPage() {
           </p>
           </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div className="flex flex-col items-center justify-center md:justify-start md:items-stretch">
           {/* Contact Information */}
           <motion.div
             variants={fadeInUp}
             initial="initial"
             animate="animate"
-            className="space-y-8"
+            className="space-y-8 w-full max-w-xl mx-auto bg-white dark:bg-dark-background rounded-2xl shadow-lg p-10 md:p-14 border border-secondary/10"
           >
-            <h2 className="text-xl font-semibold text-text-primary dark:text-dark-text-primary mb-6">
+            <h2 className="text-2xl font-bold text-center text-text-primary dark:text-dark-text-primary mb-8">
               Get in Touch
             </h2>
-            
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div className="flex items-start">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                  <EnvelopeIcon className="h-5 w-5" />
+                <div className="flex-shrink-0 h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                  <EnvelopeIcon className="h-6 w-6" />
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-md font-medium text-text-primary dark:text-dark-text-primary">
+                <div className="ml-6">
+                  <h3 className="text-lg font-semibold text-text-primary dark:text-dark-text-primary">
                     Email
                   </h3>
                   <a 
                     href="mailto:info@dsspice.com"
-                    className="text-accent hover:underline"
+                    className="text-accent hover:underline text-base"
                   >
                     info@dsspice.com
                   </a>
-        </div>
-      </div>
-
-              <div className="flex items-start">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                  <PhoneIcon className="h-5 w-5" />
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-md font-medium text-text-primary dark:text-dark-text-primary">
+              </div>
+              <div className="flex items-start">
+                <div className="flex-shrink-0 h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                  <PhoneIcon className="h-6 w-6" />
+                </div>
+                <div className="ml-6">
+                  <h3 className="text-lg font-semibold text-text-primary dark:text-dark-text-primary">
                     Phone
                   </h3>
                   <a 
                     href="tel:+441234567890"
-                    className="text-accent hover:underline"
+                    className="text-accent hover:underline text-base"
                   >
                     +44 123 456 7890
                   </a>
                 </div>
               </div>
-              
               <div className="flex items-start">
-                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                  <MapPinIcon className="h-5 w-5" />
+                <div className="flex-shrink-0 h-12 w-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                  <MapPinIcon className="h-6 w-6" />
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-md font-medium text-text-primary dark:text-dark-text-primary">
+                <div className="ml-6">
+                  <h3 className="text-lg font-semibold text-text-primary dark:text-dark-text-primary">
                     Address
                   </h3>
-                  <p className="text-text-secondary dark:text-dark-text-secondary">
+                  <p className="text-text-secondary dark:text-dark-text-secondary text-base">
                     123 Spice Street<br />
                     London, UK
                   </p>
                 </div>
               </div>
-        </div>
-
-            <div className="pt-6">
+            </div>
+            <div className="pt-8">
               <h3 className="text-md font-medium text-text-primary dark:text-dark-text-primary mb-3">
                 Business Hours
               </h3>
@@ -130,111 +126,9 @@ export default function ContactPage() {
               </p>
             </div>
           </motion.div>
-          
-          {/* Contact Form */}
-            <motion.div 
-            variants={fadeInUp}
-              initial="initial"
-            animate="animate"
-            className="bg-background-alt dark:bg-dark-background-alt p-6 rounded-lg"
-          >
-            <h2 className="text-xl font-semibold text-text-primary dark:text-dark-text-primary mb-6">
-              Send us a Message
-                </h2>
-            
-            {isSubmitted ? (
-              <div className="text-center p-6 bg-accent/10 rounded-lg">
-                <svg 
-                  className="w-12 h-12 text-accent mx-auto mb-4" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
-                  />
-                </svg>
-                <h3 className="text-lg font-medium text-text-primary dark:text-dark-text-primary mb-2">
-                  Thank You!
-                </h3>
-                <p className="text-text-secondary dark:text-dark-text-secondary">
-                  Your message has been sent. We'll get back to you soon.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                  <label 
-                    htmlFor="name"
-                    className="block text-sm font-medium text-text-primary dark:text-dark-text-primary mb-1"
-                  >
-                    Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 rounded-lg border border-secondary/20 bg-background dark:bg-dark-background focus:ring-2 focus:ring-accent"
-                  />
-                    </div>
-                    
-                    <div>
-                  <label 
-                    htmlFor="email"
-                    className="block text-sm font-medium text-text-primary dark:text-dark-text-primary mb-1"
-                  >
-                    Email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-2 rounded-lg border border-secondary/20 bg-background dark:bg-dark-background focus:ring-2 focus:ring-accent"
-                  />
-                  </div>
-                  
-                  <div>
-                  <label 
-                    htmlFor="message"
-                    className="block text-sm font-medium text-text-primary dark:text-dark-text-primary mb-1"
-                  >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                    onChange={handleChange}
-                    required
-                      rows="5"
-                    className="w-full px-4 py-2 rounded-lg border border-secondary/20 bg-background dark:bg-dark-background focus:ring-2 focus:ring-accent"
-                    ></textarea>
-                  </div>
-                  
-                <div className="pt-2">
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      fullWidth
-                    isLoading={isSubmitting}
-                    >
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
-                    </Button>
-                  </div>
-                </form>
-              )}
-            </motion.div>
-                      </div>
-                    </div>
+          {/* Contact Form is hidden for now */}
+        </div>
+      </div>
     </div>
   );
 } 

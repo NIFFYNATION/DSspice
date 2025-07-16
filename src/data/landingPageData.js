@@ -42,7 +42,7 @@ export const landingPageData = {
       {
         title: "100% Natural & Organic",
         description: "We believe the best flavors come straight from nature. Our locust beans are pure, sandfree, and completely free from artificial additives or preservatives.",
-        imageSrc: "images/featureImg1.jpeg",
+        imageSrc: "images/featureImg5.jpg",
         imageAlt: "Natural and organic locust beans",
         icon: "SparklesIcon"
       },
